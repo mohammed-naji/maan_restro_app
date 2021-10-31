@@ -13,8 +13,13 @@ class CreateMealOrderTable extends Migration
      */
     public function up()
     {
-        Schema::table('meal_order', function (Blueprint $table) {
-            //
+        Schema::create('meal_order', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id')
+            ->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('meal_id')
+            ->nullable()
+            ->constrained('meals')->nullOnDelete();
         });
     }
 
@@ -25,8 +30,6 @@ class CreateMealOrderTable extends Migration
      */
     public function down()
     {
-        Schema::table('meal_order', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('meal_order');
     }
 }

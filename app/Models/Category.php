@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function meals()
+    {
+        return $this->hasMany(Meal::class);
+    }
+
 }
