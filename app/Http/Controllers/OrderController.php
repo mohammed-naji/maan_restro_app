@@ -67,6 +67,8 @@ class OrderController extends Controller
         // add meals
         $order->meals()->attach($meals_ids);
 
+        // DB::table('order_meal')->insert([])
+
 
 
         return redirect()->route('orders.index')->with('msg', 'Order Created Successfully')->with('type', 'success');
@@ -103,9 +105,34 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
-        //
+        // data validation
+        $request->validate([
+            'order_type' => 'required',
+            'deliver_to' => 'required',
+            'user_id' => 'required_if:order_type,Out',
+            'meals' => 'required'
+        ]);
+
+        // dd($request->meals);
+        $meals_ids = [];
+        $total = 0;
+        foreach($request->meals as $meal => $quantity) {
+            $item = Meal::select('price')->find($meal);
+            $total += $item->price * $quantity;
+            $meals_ids[$meal] = ['quantity' => $quantity]; // many to many
+        }
+
+        $data = $request->except('_token', 'meals');
+        // dd($request->all());
+        $data['total'] = $total;
+        $order->update($data);
+
+        // add meals
+        $order->meals()->sync($meals_ids);
+
+        return redirect()->route('orders.index')->with('msg', 'Order Updated Successfully')->with('type', 'info');
     }
 
     /**

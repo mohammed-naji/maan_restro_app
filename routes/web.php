@@ -30,3 +30,4 @@ Route::resource('orders', OrderController::class);
 Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/getdata', [App\Http\Controllers\HomeController::class, 'getdata'])->name('getdata');

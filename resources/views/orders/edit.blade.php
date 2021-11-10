@@ -6,7 +6,7 @@
 
         <a class="btn btn-primary px-5" href="{{ route('orders.index') }}">Return Back</a>
     </div>
-    <form action="{{ route('orders.edit', $order->id) }}" method="POST">
+    <form action="{{ route('orders.update', $order->id) }}" method="POST">
     @csrf
     @method('put')
     <div class="mb-3">
@@ -58,7 +58,6 @@
     <ul class="list-group mb-4">
     @foreach ($meals as $meal)
         <li class="list-group-item d-flex align-items-center">
-            <label style="width: 150px" ><input class="meals" {{ in_array($meal->id, $items) ? 'checked' : '' }} type="checkbox" name="meals[{{ $meal->id }}]" value=""> {{ $meal->name }} - {{ $meal->price }}$</label>
             @php
                 $has_qyt = false;
             @endphp
@@ -67,13 +66,14 @@
                     @php
                         $has_qyt = true;
                     @endphp
+                    <label style="width: 150px" ><input class="meals" {{ in_array($meal->id, $items) ? 'checked' : '' }} type="checkbox" name="meals[{{ $meal->id }}]" value="{{ $qyt }}"> {{ $meal->name }} - {{ $meal->price }}$</label>
                     <input style="width: 100px" value="{{ $qyt }}" placeholder="Quantity" class="form-control form-control-sm mx-4 quantity" type="number">
                 @endif
             @endforeach
             @if (!$has_qyt)
+            <label style="width: 150px" ><input class="meals" {{ in_array($meal->id, $items) ? 'checked' : '' }} type="checkbox" name="meals[{{ $meal->id }}]" value=""> {{ $meal->name }} - {{ $meal->price }}$</label>
             <input style="width: 100px" disabled placeholder="Quantity" class="form-control form-control-sm mx-4 quantity" type="number">
             @endif
-
         </li>
     @endforeach
     </ul>
