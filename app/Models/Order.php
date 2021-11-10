@@ -13,12 +13,14 @@ class Order extends Model
 
     public function meals()
     {
-        return $this->belongsToMany(Meal::class);
+        return $this->belongsToMany(Meal::class)
+        ->withPivot('quantity')
+        ->as('items');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault(['name' => '']);
     }
 
     public function waiter()
